@@ -47,6 +47,19 @@ def update(task_id):
     return redirect(url_for("index"))
 
 
+@app.route("/delete/<int:task_id>")
+def update(task_id):
+    """
+    Delete task
+
+    :return:
+    """
+    task = Task.query.filter_by(id=task_id).first()
+    db.session.delete(task)
+    db.session.commit()
+    return redirect(url_for("index"))
+
+
 if __name__ == "__main__":
     db.create_all()
     app.run(debug=True)
