@@ -22,9 +22,27 @@ def index():
 
 @app.route("/add", methods=["POST"])
 def add():
+    """
+    Add new task
+
+    :return:
+    """
     title = request.form.get("title")
     new_task = Task(title=title, completed=False)
     db.session.add(new_task)
+    db.session.commit()
+    return redirect(url_for("index"))
+
+
+@app.route("/update/<int:task_id>")
+def update(task_id):
+    """
+    Update task
+
+    :return:
+    """
+    task = Task.query.filter_by(id=task_id).first()
+    task.completed = not task.completed
     db.session.commit()
     return redirect(url_for("index"))
 
