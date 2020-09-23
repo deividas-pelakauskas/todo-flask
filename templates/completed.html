@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block content %}
+    {% for task in task_list %}
+    {% if task.completed == True %}
+    <div class="row align-items-center border-bottom p-3">
+        <div class="col-9">
+            {{task.title}}
+        </div>
+        <div class="col">
+            <a href="/delete/{{ task.id }}"><button class="btn btn-danger float-right">Delete</button></a>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+{% endblock content %}

@@ -19,7 +19,18 @@ def index():
     task_list = Task.query.all()
     heading = "Tasks to be completed"
     page_description = "These are your tasks that are due to be completed"
-    return render_template("home.html", task_list=task_list, title="Tasks", heading=heading, page_description=page_description)
+    return render_template("home.html", task_list=task_list, title="Tasks", heading=heading,
+                           page_description=page_description)
+
+
+@app.route("/completed")
+def completed():
+    # show completed tasks
+    task_list = Task.query.all()
+    heading = "Completed tasks"
+    page_description = "These are your tasks that are already completed. You can also add new tasks from here."
+    return render_template("completed.html", task_list=task_list, title="Completed tasks", heading=heading,
+                           page_description=page_description)
 
 
 @app.route("/add", methods=["POST"])
