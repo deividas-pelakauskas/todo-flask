@@ -17,7 +17,9 @@ class Task(db.Model):
 def index():
     # show all todos
     task_list = Task.query.all()
-    return render_template("base.html", task_list=task_list)
+    heading = "Tasks to be completed"
+    page_description = "These are your tasks that are due to be completed"
+    return render_template("home.html", task_list=task_list, title="Tasks", heading=heading, page_description=page_description)
 
 
 @app.route("/add", methods=["POST"])
@@ -25,7 +27,6 @@ def add():
     """
     Add new task
 
-    :return:
     """
     title = request.form.get("title")
     new_task = Task(title=title, completed=False)
@@ -39,7 +40,6 @@ def update(task_id):
     """
     Update task
 
-    :return:
     """
     task = Task.query.filter_by(id=task_id).first()
     task.completed = not task.completed
@@ -48,11 +48,10 @@ def update(task_id):
 
 
 @app.route("/delete/<int:task_id>")
-def update(task_id):
+def delete(task_id):
     """
     Delete task
 
-    :return:
     """
     task = Task.query.filter_by(id=task_id).first()
     db.session.delete(task)

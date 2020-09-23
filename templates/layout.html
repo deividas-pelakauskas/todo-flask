@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styles.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <link rel="shortcut icon" href="">
+    <title>{{ title }}</title>
+</head>
+<body>
+    <div class="container">
+        <!--Header and add new task-->
+        <h1 class="text-center">{{ heading }}</h1>
+        <p class="text-center">{{ page_description }}</p>
+        <form action="/add" method="POST">
+            <div class="input-group mb-3">
+                <div class="input-group">
+                    <input type="text" class="form-control input-lg" name="title" placeholder="Enter task...">
+                    <input class="form-control" type="date" placeholder="Enter task deadline...">
+                    <button type="submit" class="btn btn-primary rounded-0">&nbsp;&nbsp;&nbsp;&nbsp;Add task&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                </div>
+            </div>
+        </form>
+        <!--Task list-->
+        <div class="container border">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+</body>
+</html>
