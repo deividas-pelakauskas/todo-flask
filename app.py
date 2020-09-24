@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
@@ -11,6 +12,7 @@ class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
     completed = db.Column(db.Boolean)
+    deadline = db.Column(db.String(20))
 
 
 @app.route("/")
@@ -19,8 +21,9 @@ def index():
     task_list = Task.query.all()
     heading = "Tasks to be completed"
     page_description = "These are your tasks that are due to be completed"
+    due_tasks = tasks_exist()
     return render_template("home.html", task_list=task_list, title="Tasks", heading=heading,
-                           page_description=page_description)
+                           page_description=page_description, due_tasks=due_tasks)
 
 
 @app.route("/completed")
@@ -40,7 +43,8 @@ def add():
 
     """
     title = request.form.get("title")
-    new_task = Task(title=title, completed=False)
+    deadline = request.form.get("deadline")
+    new_task = Task(title=title, deadline=deadline, completed=False)
     db.session.add(new_task)
     db.session.commit()
     return redirect(url_for("index"))
@@ -70,6 +74,28 @@ def delete(task_id):
     return redirect(url_for("index"))
 
 
+@app.template_filter('formatdatetime')
+def format_datetime(value, format="%d/%m/%Y"):
+    """Format a date time to DAY/MONTH/YEAR (Bootstrap date input field comes as YYYY-MM-DD"""
+    if value is None:
+        return ""
+    date = datetime.strptime(value, "%Y-%m-%d")
+    return date.strftime(format)
+
+
+def tasks_exist():
+    """
+    To check if there is any due tasks at all
+
+    :return: Bolean value - true means that there are some due tasks
+    """
+    if Task.query.filter_by(completed=False).count() > 0:
+        return True
+    else:
+        return False
+
+
 if __name__ == "__main__":
     db.create_all()
+    # db.drop_all()
     app.run(debug=True)

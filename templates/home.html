@@ -1,16 +1,23 @@
 {% extends "layout.html" %}
 {% block content %}
+    {% if task_list|length > 0 and due_tasks == True %}
+    <div class="row align-items-center border-bottom p-3">
+        <div class="col-5 text-uppercase font-weight-bold">Task name</div>
+        <div class="col-3 text-uppercase font-weight-bold">Task deadline</div>
+    </div>
     {% for task in task_list %}
     {% if task.completed == False %}
     <div class="row align-items-center border-bottom p-3">
-        <div class="col-9">
-            {{task.title}}
-        </div>
+        <div class="col-5">{{task.title}}</div>
+        <div class="col-3">{{task.deadline|formatdatetime}}</div>
         <div class="col">
             <a href="/delete/{{ task.id }}"><button class="btn btn-danger float-right">Delete</button></a>
-            <a href="/update/{{ task.id }}"><button class="btn btn-warning float-right mr-2">Update</button></a>
+            <a href="/update/{{ task.id }}"><button class="btn btn-success float-right mr-2">Done</button></a>
         </div>
     </div>
     {% endif %}
     {% endfor %}
+    {% else %}
+    <p class="pt-3">There are no pending tasks</p>
+    {% endif %}
 {% endblock content %}
