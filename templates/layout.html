@@ -16,7 +16,7 @@
         <h1 class="text-center">{{ heading }}</h1>
         <p class="text-center">{{ page_description }}</p>
         <form action="/add" method="POST">
-            <div class="input-group mb-5">
+            <div class="input-group">
                 <div class="input-group">
                     <input type="text" class="form-control input-lg" name="title" required placeholder="Enter task...">
                     <input class="form-control" name="deadline" type="date" placeholder="Enter task deadline...">
@@ -24,6 +24,7 @@
                 </div>
             </div>
         </form>
+        <hr class="mt-4 mb-4">
         <!--Navigation menu-->
         <ul class="nav nav-pills bg-light p-2 border mb-2">
             <li class="nav-item">
