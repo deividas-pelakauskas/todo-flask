@@ -10,9 +10,10 @@
     <div class="row align-items-center border-bottom p-3">
         <div class="col-5">{{task.title}}</div>
         <div class="col-3">{{task.deadline|formatdatetime}}</div>
-        <div class="col">
-            <a href="/delete/{{ task.id }}"><button class="btn btn-danger float-right">Delete</button></a>
-            <a href="/update/{{ task.id }}"><button class="btn btn-success float-right mr-2">Done</button></a>
+        <div class="col-md-4">
+            <a href="/delete/{{ task.id }}"><button class="btn btn-danger float-sm-left float-md-right ">Delete</button></a>
+            <a href="/update/{{ task.id }}"><button class="btn btn-success float-sm-left float-md-right mr-2">Done</button></a>
+            <a href="/edit/{{ task.id }}"><button class="btn btn-warning float-sm-left float-md-right mr-2">Edit</button></a>
         </div>
     </div>
     {% endif %}

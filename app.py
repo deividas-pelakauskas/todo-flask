@@ -38,10 +38,7 @@ def completed():
 
 @app.route("/add", methods=["POST"])
 def add():
-    """
-    Add new task
-
-    """
+    """Add new task"""
     title = request.form.get("title")
     deadline = request.form.get("deadline")
     new_task = Task(title=title, deadline=deadline, completed=False)
@@ -52,10 +49,7 @@ def add():
 
 @app.route("/update/<int:task_id>")
 def update(task_id):
-    """
-    Update task
-
-    """
+    """Update task action"""
     task = Task.query.filter_by(id=task_id).first()
     task.completed = not task.completed
     db.session.commit()
@@ -64,23 +58,48 @@ def update(task_id):
 
 @app.route("/delete/<int:task_id>")
 def delete(task_id):
-    """
-    Delete task
-
-    """
+    """Delete task action"""
     task = Task.query.filter_by(id=task_id).first()
     db.session.delete(task)
     db.session.commit()
     return redirect(url_for("index"))
 
 
+@app.route("/edit/<int:task_id>")
+def edit_task(task_id):
+    """Edit task page"""
+    task = Task.query.filter_by(id=task_id).first()
+    task_title = task.title
+    task_deadline = task.deadline
+    heading = "Edit task"
+    page_description = "You are editing a task. You can also add task from this page"
+    return render_template("edit.html", task_id=task_id, task_title=task_title, task_deadline=task_deadline, title="Edit task", heading=heading,
+                           page_description=page_description)
+
+
+@app.route("/edit-task/<int:task_id>", methods=["POST"])
+def edit_task_action(task_id):
+    """Edit task function to do the actual editing on the back-end"""
+    title = request.form.get("title")
+    deadline = request.form.get("deadline")
+    task = Task.query.filter_by(id=task_id).first()
+    task.title = title
+    task.deadline = deadline
+    db.session.commit()
+    return redirect(url_for("index"))
+
+
 @app.template_filter('formatdatetime')
 def format_datetime(value, format="%d/%m/%Y"):
-    """Format a date time to DAY/MONTH/YEAR (Bootstrap date input field comes as YYYY-MM-DD"""
+    """Format a date time to DAY/MONTH/YEAR (Bootstrap date input field comes as YYYY-MM-DD. Date is not required
+    field """
     if value is None:
         return ""
-    date = datetime.strptime(value, "%Y-%m-%d")
-    return date.strftime(format)
+    try:
+        date = datetime.strptime(value, "%Y-%m-%d")
+        return date.strftime(format)
+    except:
+        return ""
 
 
 def tasks_exist():

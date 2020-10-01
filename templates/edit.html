@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block content %}
+    <form action="/edit-task/{{ task_id }}" method="POST">
+        <div class="input-group mb-5">
+            <div class="input-group">
+                <input type="text" class="form-control input-lg" name="title" value="{{ task_title }}" placeholder="Edit task..." required>
+                <input class="form-control" name="deadline" type="date" value="{{ task_deadline }}" placeholder="Enter task deadline...">
+                <button type="submit" class="btn btn-primary rounded-0">&nbsp;&nbsp;&nbsp;&nbsp;Edit task&nbsp;&nbsp;&nbsp;&nbsp;</button>
+            </div>
+        </div>
+    </form>
+{% endblock content %}
