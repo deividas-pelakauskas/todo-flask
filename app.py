@@ -17,21 +17,23 @@ class Task(db.Model):
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
+    #  Check if there is filtering needed
     try:
+        #  Get task filtering
         filter_task = request.form.get('filter-tasks')
         if filter_task == "Deadline":
             task_list = Task.query.order_by(Task.deadline).all()
         else:
             task_list = Task.query.all()
-
     except:
         task_list = Task.query.all()
+
     heading = "Tasks to be completed"
     page_description = "These are your tasks that are due to be completed"
     #  Check if there is any due tasks
     due_tasks = tasks_exist()
     return render_template("home.html", task_list=task_list, title="Tasks", heading=heading,
-                           page_description=page_description, due_tasks=due_tasks)
+                           page_description=page_description, due_tasks=due_tasks, filter_select=filter_task)
 
 
 @app.route("/completed")

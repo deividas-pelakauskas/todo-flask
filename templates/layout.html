@@ -37,8 +37,8 @@
             </ul>
             <form class="form-inline" action="/" method="POST">
                 <select class="browser-default" name="filter-tasks" onchange="this.form.submit()">
-                    <option value="" disabled selected>Filter by...</option>
-                    <option>Deadline</option>
+                    <option>Newest</option>
+                    <option {% if filter_select =='Deadline' %} selected {% endif %}>Deadline</option>
                 </select>
             </form>
         </nav>
