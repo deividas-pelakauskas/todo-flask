@@ -93,7 +93,7 @@ def edit_task(task_id):
 def edit_task_action(task_id):
     """Edit task function to do the actual editing on the back-end"""
     title = request.form.get("title")
-    deadline = request.form.get("deadline")
+    deadline = datetime.strptime(request.form.get("deadline"), '%Y-%m-%d')
     task = Task.query.filter_by(id=task_id).first()
     task.title = title
     task.deadline = deadline

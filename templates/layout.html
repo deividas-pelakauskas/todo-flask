@@ -35,12 +35,15 @@
                     <a class="nav-link {% if request.path == '/completed' %}active{% endif %}" href="/completed">Completed tasks</a>
                 </li>
             </ul>
+            <!--Filtering-->
+            {% if request.path == '/' %}
             <form class="form-inline" action="/" method="POST">
                 <select class="browser-default" name="filter-tasks" onchange="this.form.submit()">
                     <option>Newest</option>
                     <option {% if filter_select =='Deadline' %} selected {% endif %}>Deadline</option>
                 </select>
             </form>
+            {% endif %}
         </nav>
         <!--Task list-->
         <div class="container border">
