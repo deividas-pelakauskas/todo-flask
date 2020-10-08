@@ -15,26 +15,20 @@ class Task(db.Model):
     deadline = db.Column(db.DateTime)
 
 
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def index():
-    # show all todos
-    task_list = Task.query.all()
+    try:
+        filter_task = request.form.get('filter-tasks')
+        if filter_task == "Deadline":
+            task_list = Task.query.order_by(Task.deadline).all()
+        else:
+            task_list = Task.query.all()
+
+    except:
+        task_list = Task.query.all()
     heading = "Tasks to be completed"
     page_description = "These are your tasks that are due to be completed"
-    due_tasks = tasks_exist()
-    return render_template("home.html", task_list=task_list, title="Tasks", heading=heading,
-                           page_description=page_description, due_tasks=due_tasks)
-
-
-@app.route("/", methods=["POST"])
-def index_filter():
-    filter_task = request.form.get('filter-tasks')
-    task_list = Task.query.all()
-    if filter_task == "Deadline":
-        task = Task.query.filter_by(id=deadline).first()
-    task_list = Task.query.all()
-    heading = "Tasks to be completed"
-    page_description = "These are your tasks that are due to be completed"
+    #  Check if there is any due tasks
     due_tasks = tasks_exist()
     return render_template("home.html", task_list=task_list, title="Tasks", heading=heading,
                            page_description=page_description, due_tasks=due_tasks)
@@ -54,9 +48,8 @@ def completed():
 def add():
     """Add new task"""
     title = request.form.get("title")
+    # Convert date which is in String format to datetime
     deadline = datetime.strptime(request.form.get("deadline"), '%Y-%m-%d')
-    print(deadline)
-    # deadline = request.form.get("deadline")
     new_task = Task(title=title, deadline=deadline, completed=False)
     db.session.add(new_task)
     db.session.commit()
@@ -89,7 +82,8 @@ def edit_task(task_id):
     task_deadline = task.deadline
     heading = "Edit task"
     page_description = "You are editing a task. You can also add task from this page"
-    return render_template("edit.html", task_id=task_id, task_title=task_title, task_deadline=task_deadline, title="Edit task", heading=heading,
+    return render_template("edit.html", task_id=task_id, task_title=task_title, task_deadline=task_deadline,
+                           title="Edit task", heading=heading,
                            page_description=page_description)
 
 
@@ -112,7 +106,6 @@ def format_datetime(date, format="%d/%m/%Y"):
     if date is None:
         return ""
     try:
-        # date = datetime.strptime(value, "%Y-%m-%d")
         return date.strftime(format)
     except:
         return ""
