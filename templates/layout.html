@@ -26,14 +26,22 @@
         </form>
         <hr class="mt-4 mb-4">
         <!--Navigation menu-->
-        <ul class="nav nav-pills bg-light p-2 border mb-2">
-            <li class="nav-item">
-                <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="/">Live tasks</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {% if request.path == '/completed' %}active{% endif %}" href="/completed">Completed tasks</a>
-            </li>
-        </ul>
+        <nav class="navbar navbar-light bg-light justify-content-between border">
+            <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="/">Live tasks</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == '/completed' %}active{% endif %}" href="/completed">Completed tasks</a>
+                </li>
+            </ul>
+            <form class="form-inline" action="/" method="POST">
+                <select class="browser-default" name="filter-tasks" onchange="this.form.submit()">
+                    <option value="" disabled selected>Filter by...</option>
+                    <option>Deadline</option>
+                </select>
+            </form>
+        </nav>
         <!--Task list-->
         <div class="container border">
             {% block content %}{% endblock %}

@@ -12,12 +12,26 @@ class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
     completed = db.Column(db.Boolean)
-    deadline = db.Column(db.String(20))
+    deadline = db.Column(db.DateTime)
 
 
 @app.route("/")
 def index():
     # show all todos
+    task_list = Task.query.all()
+    heading = "Tasks to be completed"
+    page_description = "These are your tasks that are due to be completed"
+    due_tasks = tasks_exist()
+    return render_template("home.html", task_list=task_list, title="Tasks", heading=heading,
+                           page_description=page_description, due_tasks=due_tasks)
+
+
+@app.route("/", methods=["POST"])
+def index_filter():
+    filter_task = request.form.get('filter-tasks')
+    task_list = Task.query.all()
+    if filter_task == "Deadline":
+        task = Task.query.filter_by(id=deadline).first()
     task_list = Task.query.all()
     heading = "Tasks to be completed"
     page_description = "These are your tasks that are due to be completed"
@@ -40,7 +54,9 @@ def completed():
 def add():
     """Add new task"""
     title = request.form.get("title")
-    deadline = request.form.get("deadline")
+    deadline = datetime.strptime(request.form.get("deadline"), '%Y-%m-%d')
+    print(deadline)
+    # deadline = request.form.get("deadline")
     new_task = Task(title=title, deadline=deadline, completed=False)
     db.session.add(new_task)
     db.session.commit()
@@ -90,13 +106,13 @@ def edit_task_action(task_id):
 
 
 @app.template_filter('formatdatetime')
-def format_datetime(value, format="%d/%m/%Y"):
+def format_datetime(date, format="%d/%m/%Y"):
     """Format a date time to DAY/MONTH/YEAR (Bootstrap date input field comes as YYYY-MM-DD. Date is not required
     field """
-    if value is None:
+    if date is None:
         return ""
     try:
-        date = datetime.strptime(value, "%Y-%m-%d")
+        # date = datetime.strptime(value, "%Y-%m-%d")
         return date.strftime(format)
     except:
         return ""
