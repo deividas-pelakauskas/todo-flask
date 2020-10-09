@@ -12,6 +12,7 @@ class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
     completed = db.Column(db.Boolean)
+    date_completed = db.Column(db.DateTime)
     deadline = db.Column(db.DateTime)
 
 
@@ -67,7 +68,10 @@ def add():
 def update(task_id):
     """Update task action"""
     task = Task.query.filter_by(id=task_id).first()
+    #  Mark task as completed
     task.completed = not task.completed
+    #  Add completion date
+    task.date_completed = datetime.now()
     db.session.commit()
     return redirect(url_for("index"))
 

@@ -3,10 +3,13 @@
     {% for task in task_list %}
     {% if task.completed == True %}
     <div class="row align-items-center border-bottom p-3">
-        <div class="col-9">
-            {{task.title}}
-        </div>
-        <div class="col">
+        <div class="col-7 col-md-8 col-lg-5 text-uppercase font-weight-bold">Task name</div>
+        <div class="col-5 col-md-4 col-lg-3 text-uppercase font-weight-bold">Task completion date</div>
+    </div>
+    <div class="row align-items-center border-bottom p-3">
+        <div class="col-7 col-md-8 col-lg-5">{{task.title}}</div>
+        <div class="col-5 col-md-4 col-lg-3">{{task.date_completed|formatdatetime}}</div>
+        <div class="col-auto col-md-12 col-lg-4 mt-3 mt-md-3 mt-lg-0">
             <a href="/delete/{{ task.id }}"><button class="btn btn-danger float-right">Delete</button></a>
         </div>
     </div>
