@@ -9,7 +9,7 @@
     {% if task.completed == False %}
     <div class="row align-items-center border-bottom p-3">
         <div class="col-7 col-md-8 col-lg-5">{{task.title}}</div>
-        <div class="col-5 col-md-4 col-lg-3">{{task.deadline|formatdatetime}}</div>
+        <div class="col-5 col-md-4 col-lg-3 {% if overdue(task.deadline) == True %}text-danger font-weight-bold{% endif %}">{{task.deadline|formatdatetime}}</div>
         <div class="col-auto col-md-12 col-lg-4 mt-3 mt-md-3 mt-lg-0">
             <a href="/delete/{{ task.id }}"><button class="btn btn-danger float-sm-left float-lg-right mr-md-2">Delete</button></a>
             <a href="/update/{{ task.id }}"><button class="btn btn-success float-sm-left float-lg-right mr-lg-2 mr-md-2">Done</button></a>

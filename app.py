@@ -24,16 +24,18 @@ def index():
         if filter_task == "Deadline":
             task_list = Task.query.order_by(Task.deadline).all()
         else:
-            task_list = Task.query.all()
+            task_list = Task.query.order_by(Task.id.desc()).all()
     except:
-        task_list = Task.query.all()
+        task_list = Task.query.order_by(Task.id.desc()).all()
 
     heading = "Tasks to be completed"
     page_description = "These are your tasks that are due to be completed"
     #  Check if there is any due tasks
     due_tasks = tasks_exist()
+    print(datetime.now())
     return render_template("home.html", task_list=task_list, title="Tasks", heading=heading,
-                           page_description=page_description, due_tasks=due_tasks, filter_select=filter_task)
+                           page_description=page_description, due_tasks=due_tasks, filter_select=filter_task,
+                           overdue=check_overdue)
 
 
 @app.route("/completed")
@@ -50,8 +52,11 @@ def completed():
 def add():
     """Add new task"""
     title = request.form.get("title")
-    # Convert date which is in String format to datetime
-    deadline = datetime.strptime(request.form.get("deadline"), '%Y-%m-%d')
+    # Convert date which is in String format to datetime. Try except is there, because date can be empty
+    try:
+        deadline = datetime.strptime(request.form.get("deadline"), '%Y-%m-%d')
+    except:
+        deadline = None
     new_task = Task(title=title, deadline=deadline, completed=False)
     db.session.add(new_task)
     db.session.commit()
@@ -123,6 +128,22 @@ def tasks_exist():
         return True
     else:
         return False
+
+
+def check_overdue(date):
+    """
+    Check if task is overdue
+
+    :param date: datetime object - task deadline
+    :return: Boolean, True if task is overdue
+    """
+    #  If statement to check if date input field is not empty
+    if date is not None:
+        present = datetime.now()
+        if date < present:
+            return True
+        else:
+            return False
 
 
 if __name__ == "__main__":
